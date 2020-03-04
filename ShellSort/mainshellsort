@@ -1,0 +1,57 @@
+import timeit
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from random import shuffle
+mpl.use('Agg')
+
+#---------------------------------------------------------------------------
+def OrdenacaoShellSort(lista):
+    tamanho = len(lista)
+    intervalo = tamanho // 2
+
+    while intervalo > 0:
+        for i in range(intervalo, tamanho):
+            aux = lista[i]
+            j = i
+            while j >= intervalo and lista[j - intervalo] > aux:
+                lista[j] = lista[j - intervalo]
+                j -= intervalo
+            lista[j] = aux
+        intervalo //= 2
+#--------------------------------------------------------------------------
+
+def GerarListaRandomica(tamanho):
+    lista = list(range(1, tamanho + 1))
+    shuffle(lista)
+    return lista
+
+#--------------------------------------------------------------------------
+
+def FuncaoDesenharGrafico(x, y, figura, xLabel ="Variáveis de Entradas", yLabel ="Respostas da Saída"):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111)
+    ax.plot(x, y, label ="Lista Estocástica")
+    ax.legend(bbox_to_anchor=(1, 1),bbox_transform=plt.gcf().transFigure)
+    plt.ylabel(yLabel)
+    plt.xlabel(xLabel)
+    plt.savefig(figura)
+
+#--------------------------------------------------------------------------
+#Magnitude da Lista Randômica:
+
+f1 = 30000
+f2 = 40000
+f3 = 50000
+f4 = 60000
+f5 = 70000
+
+#--------------------------------------------------------------------------
+
+tamanho = [f1, f2, f3, f4, f5]
+tempo = []
+
+for i in range(5):
+    lista = GerarListaRandomica(tamanho[i])
+    tempo.append(timeit.timeit("OrdenacaoShellSort({})".format(lista), setup="from __main__ import OrdenacaoShellSort", number=1))
+
+FuncaoDesenharGrafico(tamanho, tempo, "Tempo.png", 'Magnitude - Lista Números', 'Tempo de Ordenação do ShellSort')
