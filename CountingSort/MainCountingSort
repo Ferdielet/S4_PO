@@ -1,0 +1,54 @@
+import timeit
+from random import randint, shuffle
+import matplotlib.pyplot as plt
+
+#-----------Função Counting-----------------------------
+
+def count(lista, maximo):
+	count = [0] * (maximo+1)
+	listaOrdenada = [None] * len(lista)
+	for i in range(len(lista)):
+		count[lista[i]] += 1
+	for i in range(1, maximo+1):
+		count[i] += count[i-1] 
+	for i in range(len(lista)):
+		listaOrdenada[count[lista[i]]-1] = lista[i]
+		count[lista[i]] -= 1
+        
+#----------------------------------------------------------
+
+def FuncaodesenhaGrafico(x,lista1,xl = "Valores de Entradas", yl = "Valores de Y",name="Saída/Out", label1 = "Geração da Primeira Lista", label2 = "Geração da Segunda Lista"):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111)
+    ax.plot(x, lista1, label = label1)
+    ax.legend(bbox_to_anchor=(1, 1),bbox_transform=plt.gcf().transFigure)
+    plt.ylabel(yl)
+    plt.xlabel(xl)
+    plt.savefig(name)
+
+#-----------Função pra Gerar Lista-------------------
+
+def FuncaogeraLista(tam):
+    lista = list(range(1, tam + 1))
+    shuffle(lista)
+    return lista
+
+#---------------------------------------------------
+def sort(lista, maximo):
+    count(lista, maximo)
+
+    
+f1 = 30000
+f2 = 40000
+f3 = 50000
+f4 = 60000
+f5 = 70000
+quant = [f1, f2, f3, f4, f5]
+graf_tempo = []
+
+for i in range(len(quant)):
+    print(quant[i])
+    lista = FuncaogeraLista(quant[i])
+    graf_tempo.append(timeit.timeit("sort({},{})".format(lista, quant[i]),setup="from __main__ import sort",number=1))
+
+FuncaodesenhaGrafico(quant,graf_tempo,"Magnitude", "Contagem do Tempo", "Tempo", label1 = "Lista Estocástica \nGerada")
