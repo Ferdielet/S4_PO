@@ -1,0 +1,57 @@
+import timeit
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from random import shuffle
+mpl.use('Agg')
+
+#-----------FUNCÃO RADIX SORT----------------------------
+def FuncaoRadixsort(lista):
+    base = 1
+    maior = max(lista)
+
+    while maior/base > 0:
+        indice = len(lista) + 1
+        ocorrencias = [0] * indice
+
+        for i in lista:
+            ocorrencias[i] += 1
+
+        k = 0
+
+        for i in range(indice):
+            for j in range(ocorrencias[i]):
+                lista[k] = i
+                k += 1
+        base *= 10
+#------------------------------------------------------
+
+def FuncaoDesenharGrafico(x, y, figura, xLabel ="Variáveis de Entradas", yLabel ="Variáveis de Saídas"):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111)
+    ax.plot(x, y, label ="Lista Valores Estocásticos")
+    ax.legend(bbox_to_anchor=(1, 1),bbox_transform=plt.gcf().transFigure)
+    plt.ylabel(yLabel)
+    plt.xlabel(xLabel)
+    plt.savefig(figura)
+
+def FuncaoGeraLista(tamanho):
+    lista = list(range(1, tamanho + 1))
+    shuffle(lista)
+    return lista
+
+#------Listas-----------------------------------------------
+
+f1 = 20000
+f2 = 30000
+f3 = 40000
+f4 = 50000
+f5 = 60000
+
+tamanho = [f1,f2,f3,f4,f5]
+tempo = []
+
+for i in range(5):
+    lista = FuncaoGeraLista(tamanho[i])
+    tempo.append(timeit.timeit("radixsort({})".format(lista), setup="from __main__ import radixsort", number=1))
+
+FuncaoDesenharGrafico(tamanho, tempo, "Tempo.png", 'Magnitude Lista de números', 'Tempo_OrdenaçãoTempo pelo Método RadixSort')
