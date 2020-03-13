@@ -1,0 +1,75 @@
+import timeit
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from random import shuffle
+mpl.use('Agg')
+
+#---------Função BUCKET SORT--------------------------------------
+def bucketsort(lista):
+    comprimento = len(lista)
+    cesta = [[] for _ in range(comprimento)]
+    maior = max(lista)
+    tamanho = maior/comprimento
+
+    for i in range(comprimento):
+        j = int(lista[i] / tamanho)
+        if j != comprimento:
+            cesta[j].append(lista[i])
+        else:
+            cesta[comprimento - 1].append(lista[i])
+        #Append: Adds its argument as a single element to the end of a list.    
+
+    for i in range(comprimento):
+        insertionsort(cesta[i])
+
+    lista_ordenada = []
+    for i in range(comprimento):
+        lista_ordenada = lista_ordenada + cesta[i]
+
+    return lista_ordenada
+#-----------------------------------------------------------------------
+
+#------Função para desenhar o gráfico-------------------------------------------------------------
+def FuncaoDesenharGrafico(x, y, figura, xL ="Variáveis de Entradas", yL ="Variáveis de Saídas"):
+    fig = plt.figure(figsize=(12, 10))
+    ax = fig.add_subplot(111)
+    ax.plot(x, y, label ="Lista Estocástica de Valores")
+    ax.legend(bbox_to_anchor=(1, 1),bbox_transform=plt.gcf().transFigure)
+    plt.ylabel(yL)
+    plt.xlabel(xL)
+    plt.savefig(figura)
+#--------------------------------------------------------------------------------------------------
+
+#--------Função Auxiliar InsertSort--------------
+
+def insertionsort(lista):
+    for i in range(1, len(lista)):
+        atual = lista[i]
+        j = i - 1
+        while j >= 0 and atual < lista[j]:
+            lista[j + 1] = lista[j]
+            j -= 1
+        lista[j + 1] = atual
+#------------------------------------------------
+
+#-------Função para Geração da Lista----------
+def FuncaoGerarLista(tamanho):
+    lista = list(range(1, tamanho + 1))
+    shuffle(lista)
+    return lista
+#---------------------------------------------
+
+#----------Lista-------------------------------
+f1 = 15000
+f2 = 25000
+f3 = 35000
+f4 = 45000
+f5 = 550000
+tamanho = [f1, f2, f3, f4, f5]
+tempo = []
+
+for i in range(5):
+    lista = FuncaoGerarLista(tamanho[i])
+    tempo.append(timeit.timeit("bucketsort({})".format(lista), setup="from __main__ import bucketsort", number=1))
+
+FuncaoDesenharGrafico(tamanho, tempo, "Tempo.png", 'Magnitude - Lista de Números', 'Tempo Ordenação Pelo Método\nBUCKET_SORT')
