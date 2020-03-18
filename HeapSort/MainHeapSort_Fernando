@@ -1,0 +1,71 @@
+import timeit
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from random import shuffle
+mpl.use('Agg')
+
+#-----------FUNCÃO PRINCIPAL HEADSORT--------------------------------------------------------
+def FuncaoHeapsort(lista):
+    for i in range(len(lista), -1, -1):
+        FuncaoDistribuir(lista, len(lista), i)
+
+    for i in range(len(lista)-1, 0, -1):
+        aux = lista[i]
+        lista[i] = lista[0]
+        lista[0] = aux
+        FuncaoDistribuir(lista, i, 0)
+#---------------------------------------------------------------------------------------------
+
+#-------------FUNCÃO DE DISTRIBUIÇÃO MA LISTA---------------------
+def FuncaoDistribuir(lista, tamanho, atual):
+    maior = atual
+    esquerdo = 2 * atual + 1
+    direito = 2 * atual + 2
+
+    if esquerdo < tamanho and lista[atual] < lista[esquerdo]:
+        maior = esquerdo
+
+    if direito < tamanho and lista[maior] < lista[direito]:
+        maior = direito
+
+    if maior != atual:
+        aux = lista[atual]
+        lista[atual] = lista[maior]
+        lista[maior] = aux
+        FuncaoDistribuir(lista, tamanho, maior)
+#--------------------------------------------------------------
+
+#--------------FUNÇÃO PARA GERAR LISTA DE VALORES-----------
+def FuncaoGerarLista(tamanho):
+    lista = list(range(1, tamanho + 1))
+    shuffle(lista)
+    return lista
+#---------------------------------------------------------
+
+#-----------FUNÇÃO PARA DESENHAR O GRÁFICO----------------------------------------------------
+def FuncaoDesenharGrafico(x, y, figura, xL ="Valores de Entradas", yL ="Valores de Saídas"):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111)
+    ax.plot(x, y, label ="Lista Estocástica dos\nValores Apresentados")
+    ax.legend(bbox_to_anchor=(1, 1),bbox_transform=plt.gcf().transFigure)
+    plt.ylabel(yL)
+    plt.xlabel(xL)
+    plt.savefig(figura)
+#----------------------------------------------------------------------------------------------
+
+#---------------TAMANHO DAS SÉRIES------------------
+f1 = 15000
+f2 = 25000
+f3 = 35000
+f4 = 45000
+f5 = 55000
+tamanho = [f1, f2, f3, f4, f5]
+tempo = []
+#---------------------------------------------------
+
+#-----------------FINALIZAÇÃO DO CÓDIGO-------------------------------------------------------------------------------------
+for i in range(5):
+    lista = FuncaoGerarLista(tamanho[i])
+    tempo.append(timeit.timeit("FuncaoHeapsort({})".format(lista), setup="from __main__ import FuncaoHeapsort", number=1))
+
+FuncaoDesenharGrafico(tamanho, tempo, "Tempo.png", 'Magnitude da lista de números', 'Tempo de Ordenação do método HeapSort')
