@@ -1,6 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX 100 //Define o tamanho máximo do nome/caminho do arquivo e de caracteres (por linha) que serão lidos na importação
+/*
+Aluno: Fernando Weslley Silva de Oliveira
+Matrícula: 20182015020320
+*/
 
 void imprime_tela_cabecalho()
 {
