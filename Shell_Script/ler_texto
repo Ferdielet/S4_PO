@@ -1,0 +1,7 @@
+imagesAtDirectory=ls /Users/fernandoweslley/Desktop/trabalhoSO/imagens.txt
+echo "\n Realizando Leitura \n"
+count=1
+while read line; do
+  echo "$line.png"
+  count=$((count+1))
+done < $imagesAtDirectory
