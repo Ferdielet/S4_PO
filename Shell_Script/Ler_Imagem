@@ -1,0 +1,12 @@
+imagesAtDirectory=ls /Users/fernandoweslley/Desktop/images/*.png
+echo "\n Verificação da Imagem \n"
+
+> trabalhoSO/imagens.txt
+for image in $imagesAtDirectory
+do
+   
+   echo $image
+   
+      echo $image | cut -f 1 -d '.' >> trabalhoSO/imagens.txt
+done
+echo "\n Imagens verificadas e lidas"
